@@ -42,6 +42,7 @@ RUN unzip -q -d /usr/web/html/ /usr/web/html/lx-doc.zip \
 COPY nginx.conf /usr/nginx/config/
 COPY my.cnf /etc/mysql/my.cnf
 COPY mysql_init_start.sh /usr/app/${SERVICE}/
+RUN cat doc_v2.sql >> doc.sql
 COPY doc.sql /usr/app/${SERVICE}/
 COPY run_in_docker_whole.sh /usr/app/${SERVICE}/
 COPY application-prod.yml /usr/config/${SERVICE}/
