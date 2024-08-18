@@ -29,6 +29,7 @@ public class DocCollectFolderController {
 
     @Autowired
     private DocCollectFolderAO docCollectFolderAO;
+    
 
 
     @GetMapping(value = "/getCollectFileList")
