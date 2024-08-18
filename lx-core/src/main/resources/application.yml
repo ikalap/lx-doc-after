@@ -5,7 +5,7 @@ app.name: lx-doc
 server:
   port: 9222
   servlet:
-    context-path: /
+    context-path: /lx-doc-api
   tomcat:
     threads:
       max: 200 # Maximum amount of worker threads.
@@ -66,6 +66,6 @@ spring:
       maxOpenPreparedStatements: 20
       useGlobalDataSourceStat: false
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000;druid.stat.logSlowSql=true
-      url: jdbc:mysql://127.0.0.1:3306/database_name?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
-      username: xxx
-      password: xxx
+      url: jdbc:mysql://${ENV_MYSQL_URI}/lx_doc?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+      username: ${ENV_MYSQL_USERNAME}
+      password: ${ENV_MYSQL_PASSWORD}

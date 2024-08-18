@@ -1,28 +1,19 @@
-# 拉取基础镜像
-FROM openjdk:8-jdk-alpine
-# 维护人
-MAINTAINER 951645267@qq.com
+FROM openjdk:17-alpine
+LABEL authors="kalpa"
+LABEL maintainer="kalpa"
 
-ENV SERVICE lx-doc
+# 应用名称和版本
+ENV APP_NAME=springboot_test
+ENV APP_VERSION=0.0.1
 
-USER root
+# 创建应用目录
+WORKDIR /app
 
-EXPOSE 9222
+# 编译后的spring boot jar 文件复制到镜像
+COPY target/lx-doc.jar /app.jar
 
-# 处理时区
-RUN apk add tzdata  \
-    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone \
-    && apk del tzdata
+# 暴露容器端口
+EXPOSE 8080
 
-# 创建目录
-RUN mkdir -p /usr/app/${SERVICE}/ \
-    && mkdir -p /usr/logs/${SERVICE}/ \
-    && mkdir -p /usr/attament/${SERVICE}/
-
-ADD run_in_docker.sh /usr/app/${SERVICE}/
-COPY lx-core/target/lx-doc.jar /usr/app/${SERVICE}/
-
-WORKDIR /usr/app/${SERVICE}/
-
-ENTRYPOINT ["sh", "run_in_docker.sh", "initStart"]
+# 允许spring boot 应用
+ENTRYPOINT ["java", "-jar", "/app.jar"]

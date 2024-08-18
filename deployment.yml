@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lx-doc-after
+  labels:
+    app: lx-doc-after
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lx-doc-after
+  template:
+    metadata:
+      labels:
+        app: lx-doc-after
+    spec:
+      containers:
+        - name: lx-doc-after
+#         这里的镜像会被jenkins 使用sed -i 命令自动替换
+          image: localhost:30500/{image_name}-{image_tag}
+          envFrom:
+            - configMapRef:
+                name: test-configmap
+          ports:
+            - containerPort: 9222
+          env:
+            - name: JAVA_OPTS
+              value: "-Xmx512m -Xms512m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lx-doc-after
+spec:
+  selector:
+    app: lx-doc-after
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8080
+  type: ClusterIP
