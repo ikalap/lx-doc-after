@@ -49,7 +49,7 @@ pipeline {
             steps {
                 sh """
                     kubectl apply -f deployment.yml
-                    kubectl rollout status deployment/springboot-test
+                    kubectl rollout status deployment/lx-doc-after
                 """
             }
         }
