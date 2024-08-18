@@ -54,12 +54,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            cleanup {
-                sh ''' docker rmi -f $(docker images -q)  '''
-            }
-        }
-    }
 }
