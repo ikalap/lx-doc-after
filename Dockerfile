@@ -10,7 +10,7 @@ ENV APP_VERSION=0.0.1
 WORKDIR /app
 
 # 编译后的spring boot jar 文件复制到镜像
-COPY target/lx-doc.jar /app.jar
+COPY lx-core/target/lx-doc.jar /app.jar
 
 # 暴露容器端口
 EXPOSE 8080
