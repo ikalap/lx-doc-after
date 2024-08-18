@@ -5,7 +5,7 @@ app.name: lx-doc
 server:
   port: 9222
   servlet:
-    context-path: /lx-doc-api
+    context-path: /lx-doc-after
   tomcat:
     threads:
       max: 200 # Maximum amount of worker threads.

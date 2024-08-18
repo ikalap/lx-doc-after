@@ -36,6 +36,6 @@ spec:
     app: lx-doc-after
   ports:
     - protocol: TCP
-      port: 8000
-      targetPort: 8080
+      port: 9222
+      targetPort: 9222
   type: ClusterIP
