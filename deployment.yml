@@ -18,6 +18,9 @@ spec:
         - name: lx-doc-after
 #         这里的镜像会被jenkins 使用sed -i 命令自动替换
           image: localhost:30500/{image_name}-{image_tag}
+          volumeMounts:
+            - mountPath: /app/lx-doc-after
+              name: shared-volume
           envFrom:
             - configMapRef:
                 name: test-configmap
@@ -26,6 +29,10 @@ spec:
           env:
             - name: JAVA_OPTS
               value: "-Xmx512m -Xms512m"
+      volumes:
+        - hostPath:
+            path: /app/lx-doc-after
+          name: shared-volume
 ---
 apiVersion: v1
 kind: Service

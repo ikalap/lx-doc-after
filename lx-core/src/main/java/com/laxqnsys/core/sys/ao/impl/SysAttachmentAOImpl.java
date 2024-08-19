@@ -77,7 +77,7 @@ public class SysAttachmentAOImpl implements SysAttachmentAO {
         String fileUploadPath = lxDocWebProperties.getFileUploadPath();
         String path = fileUploadPath + File.separator + fileName;
 
-        checkPathAndMkdirs(path);
+        checkPathAndMkdirs(fileUploadPath);
 
         try (InputStream inputStream = new ByteArrayInputStream(data);
             FileOutputStream outputStream = new FileOutputStream(path)) {
