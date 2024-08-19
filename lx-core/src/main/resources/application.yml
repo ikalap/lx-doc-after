@@ -19,7 +19,8 @@ mybatis-plus:
 
 lx:
   doc:
-    whiteUrlList: /,/api/login,/api/register,/static/**,/assets/**,/system/error # 白名单url，配置之后将会被登录拦截器拦截
+    # 白名单url，配置之后将不会被登录拦截器拦截
+    whiteUrlList: /,/lx-doc-after/api/login,/lx-doc-after/api/register,/lx-doc-after/static/**,/lx-doc-after/assets/**,/lx-doc-after/system/error
     fileUploadPath: /usr/attament/ # 配置文件上传的地址
     indexHtmlWebPath: /assets/index.html # 配置欢迎页
     staticResources:
