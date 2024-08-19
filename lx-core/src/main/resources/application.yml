@@ -21,10 +21,10 @@ lx:
   doc:
     # 白名单url，配置之后将不会被登录拦截器拦截 1 2
     whiteUrlList: /,/lx-doc-after/api/login,/lx-doc-after/api/register,/lx-doc-after/static/**,/lx-doc-after/assets/**,/lx-doc-after/system/error
-    fileUploadPath: /app/attament/ # 配置文件上传的地址
+    fileUploadPath: /app/lx-doc-after/attament/ # 配置文件上传的地址
     indexHtmlWebPath: /assets/index.html # 配置欢迎页
     static:
-      prefix: /lx-doc-afteer/static/
+      prefix: /lx-doc-after/static/
     staticResources:
       - pathPatterns: /static/** # 配置静态资源访问的web uri
         resourceLocations: file:///${lx.doc.fileUploadPath} # 配置静态资源所在物理磁盘的位置，不过静态资源的访问尽量使用 nginx 反向代理
