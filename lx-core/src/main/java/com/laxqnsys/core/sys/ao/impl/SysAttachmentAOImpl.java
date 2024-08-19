@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +35,8 @@ public class SysAttachmentAOImpl implements SysAttachmentAO {
 
     private Pattern imgBase64Pattern = Pattern.compile("^data:image/([a-zA-Z]+);base64,");
 
-    private final String FIX_STATIC_PATH = "/static/";
+    @Value("${lx.doc.static.prefix:/static/}")
+    private String FIX_STATIC_PATH;
 
     @Override
     public List<String> uploadFiles(MultipartFile[] file) {
@@ -42,11 +44,9 @@ public class SysAttachmentAOImpl implements SysAttachmentAO {
             String fileUploadPath = lxDocWebProperties.getFileUploadPath();
             String uuid = UUID.randomUUID().toString();
             String randomDir = fileUploadPath + File.separator + uuid;
-            File outFile = new File(randomDir);
-            if (!outFile.exists() && !outFile.mkdirs()) {
-                throw new BusinessException(ErrorCodeEnum.ERROR.getCode(),
-                    String.format("附件目录%s创建失败！", randomDir));
-            }
+
+            checkPathAndMkdirs(randomDir);
+
             String shortPath = uuid + File.separator + f.getOriginalFilename();
             String path = fileUploadPath + File.separator + shortPath;
             try (InputStream inputStream = f.getInputStream();
@@ -76,6 +76,9 @@ public class SysAttachmentAOImpl implements SysAttachmentAO {
         String fileName = UUID.randomUUID() + "." + suffix;
         String fileUploadPath = lxDocWebProperties.getFileUploadPath();
         String path = fileUploadPath + File.separator + fileName;
+
+        checkPathAndMkdirs(path);
+
         try (InputStream inputStream = new ByteArrayInputStream(data);
             FileOutputStream outputStream = new FileOutputStream(path)) {
             IoUtil.copy(inputStream, outputStream);
@@ -83,5 +86,17 @@ public class SysAttachmentAOImpl implements SysAttachmentAO {
             throw new BusinessException(ErrorCodeEnum.ERROR.getCode(), "上传图片失败！", e);
         }
         return FIX_STATIC_PATH + fileName;
+    }
+
+
+    /**
+     * 检查路径是否重复，以及，创建目录
+     */
+    private void checkPathAndMkdirs(String path){
+        File pathFile = new File(path);
+        if (!pathFile .exists() && !pathFile.mkdirs()) {
+            throw new BusinessException(ErrorCodeEnum.ERROR.getCode(),
+                    String.format("附件目录%s创建失败！", path));
+        }
     }
 }
