@@ -154,19 +154,22 @@ public class DocFileContentAOImpl extends AbstractDocFileFolderAO implements Doc
 
     @Override
     public void copyFile(DocFileCopyReqVO reqVO) {
-
+        // 1.判断目标是否是有效的文件夹
         Long newFolderId = reqVO.getNewFolderId();
         DocFileFolder parent = super.getById(newFolderId);
         if(FileFolderFormatEnum.FILE.getFormat().equals(parent.getFormat())) {
           throw new BusinessException(ErrorCodeEnum.ERROR.getCode(), "只能复制到文件夹下！");
         }
+
+        // 2. 寻找源文件
         List<Long> originIdList = reqVO.getIds();
-        List<DocFileFolder> fileFolders = super.selectByIdList(originIdList).stream()
-            .filter(e -> !e.getParentId().equals(reqVO.getNewFolderId())).collect(Collectors.toList());
+//        List<DocFileFolder> fileFolders = super.selectByIdList(originIdList).stream().collect(Collectors.toList());
+        List<DocFileFolder> fileFolders = super.selectByIdList(originIdList);
         if (CollectionUtils.isEmpty(fileFolders)) {
             return;
         }
         LocalDateTime currentLdt = LocalDateTime.now();
+        // 3. 将源文件拷贝
         fileFolders.stream().forEach(e -> {
             e.setOldId(e.getId());
             e.setId(null);
@@ -176,6 +179,7 @@ public class DocFileContentAOImpl extends AbstractDocFileFolderAO implements Doc
             e.setParentId(reqVO.getNewFolderId());
         });
         Long userId = LoginContext.getUserId();
+        // 4. 事务执行更新: 1. 插入新文件 2. 更新文件夹中文件数量+1 3. 填充新文件的具体内容
         transactionTemplate.execute(status -> {
             docFileFolderService.saveBatch(fileFolders);
             docFileFolderService.updateFileCount(reqVO.getNewFolderId(), fileFolders.size());
